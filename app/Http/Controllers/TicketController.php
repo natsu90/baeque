@@ -86,8 +86,8 @@ class TicketController extends Controller
     	}
 
     	// get la
-    	$queue_list = Ticket::where('done', false)->where('premise_id', $premise_id)->where('activity_id', $activity_id)->where('created_at', 'like', date('Y-m-d').' %' )->orderBy('queue_id', 'desc')->get(3);
-    	print_r($queue_list);
+    	$queue_list = Ticket::where('done', false)->where('premise_id', $premise_id)->where('activity_id', $activity_id)->where('created_at', 'like', date('Y-m-d').' %' )->orderBy('queue_id', 'desc')->limit(3)->get();
+    	return response()->json($queue_list);
     }
 
 
