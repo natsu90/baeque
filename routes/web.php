@@ -11,6 +11,5 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/ticket_id', 'TicketController@createTicket');
+Route::get('/get_eta', 'TicketController@getTicketETA');

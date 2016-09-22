@@ -17,10 +17,9 @@ class CreateTicketsTable extends Migration
             $table->increments('id');
             $table->integer('premise_id');
             $table->integer('activity_id');
-            $table->boolean('done');
+            $table->boolean('done')->default(false);
             $table->integer('queue_id');
             $table->timestamps();
-            $table->datetime('finished_at');
         });
     }
 
