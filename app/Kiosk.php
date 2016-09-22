@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kiosk extends Model
 {
-    //
+    public function listActivityBasedOnOpenCounter() {
+    	
+    }
 }

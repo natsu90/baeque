@@ -18,6 +18,8 @@ class CreateCountersTable extends Migration
             $table->integer('premise_id');
             $table->string('counter_enabled');
             $table->string('name');
+            $table->datetime('last_online');
+            $table->boolean('online');
             $table->timestamps();
         });
     }
