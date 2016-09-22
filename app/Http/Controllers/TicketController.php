@@ -45,6 +45,7 @@ class TicketController extends Controller
     		$ticket->premise_id = $premise_id;
     		$ticket->activity_id = $activity_id;
     		$ticket->queue_id = $old;
+    		$ticket->invite = '';
     		//$ticket_new->finished_at = false;
     		$ticket->save();
     	} else {
@@ -54,6 +55,7 @@ class TicketController extends Controller
     		$ticket->premise_id = $premise_id;
     		$ticket->activity_id = $activity_id;
     		$ticket->queue_id = 0;
+    		$ticket->invite = '';
     		//$ticket_new->finished_at = false;
     		$ticket->save();
 

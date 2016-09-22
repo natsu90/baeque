@@ -20,8 +20,9 @@ class CreateTicketsTable extends Migration
             $table->boolean('served')->default(false);
             $table->boolean('done')->default(false);
             $table->integer('queue_id');
-            $table->datetime('served_time');
-            $table->datetime('done_time');
+            //$table->datetime('served_time');
+            //$table->datetime('done_time');
+            $table->string('invite');
             $table->timestamps();
         });
     }
