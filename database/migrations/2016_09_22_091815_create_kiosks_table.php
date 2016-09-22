@@ -16,7 +16,7 @@ class CreateKiosksTable extends Migration
         Schema::create('kiosks', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('premise_id');
-            //$table->json('activities_enabled');
+            $table->string('activities_enabled');
             $table->timestamps();
         });
     }

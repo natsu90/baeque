@@ -20,6 +20,7 @@ class CreateTicketsTable extends Migration
             $table->boolean('done');
             $table->integer('queue_id');
             $table->timestamps();
+            $table->datetime('finished_at');
         });
     }
 

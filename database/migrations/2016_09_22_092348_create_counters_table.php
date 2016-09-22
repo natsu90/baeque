@@ -16,7 +16,7 @@ class CreateCountersTable extends Migration
         Schema::create('counters', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('premise_id');
-            //$table->json('counter_enabled');
+            $table->string('counter_enabled');
             $table->string('name');
             $table->timestamps();
         });
