@@ -13,12 +13,11 @@ class CreateActivitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('activites', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('premise_id');
             $table->string('name');
             $table->string('desc');
-
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateActivitiesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('activites');
+        Schema::drop('activities');
     }  //
 }

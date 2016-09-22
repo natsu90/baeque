@@ -13,10 +13,10 @@ class PremiseSeeder extends Seeder
     public function run()
     {
         $premise = new Premise;
-        $premise->name = "Klinik Kesihatan Beranang";
-        $premise->location = "Beranang, Selangor.";
-        $premise->logo = "/logo/klinik.png";
-        $premise->desc = "Sebuah klinik kecil yang terletak di Beranang.";
+        $premise->name = "Pejabat Pos Semenyih";
+        $premise->location = "Semenyih, Selangor.";
+        $premise->logo = "/logo/pejabat.png";
+        $premise->desc = "Opens 9 AM - 6 PM.";
         $premise->owner = 1;
         $premise->save();
     }

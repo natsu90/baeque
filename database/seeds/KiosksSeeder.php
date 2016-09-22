@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class KioksSeeder extends Seeder
+class KiosksSeeder extends Seeder
 {
     /**
      * Run the database seeds.
