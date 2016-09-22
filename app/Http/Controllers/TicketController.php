@@ -87,7 +87,15 @@ class TicketController extends Controller
 
     	// get la
     	$queue_list = Ticket::where('done', false)->where('premise_id', $premise_id)->where('activity_id', $activity_id)->where('created_at', 'like', date('Y-m-d').' %' )->orderBy('queue_id', 'desc')->limit(3)->get();
-    	return response()->json($queue_list);
+    	//return response()->json($queue_list);
+
+    	$list = [];
+
+    	foreach ($queue_list as $queue) {
+    		$list[] = ['queue' => $activity_id . str_pad($queue->queue_id, 3, "0", STR_PAD_LEFT), 'started' => $queue->created_at];
+    	}
+
+    	return response()->json($list);
     }
 
 
