@@ -16,7 +16,7 @@ class CreateCountersTable extends Migration
         Schema::create('counters', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('premise_id');
-            $table->string('counter_enabled');
+            $table->string('activity_processed');
             $table->string('name');
             $table->datetime('last_online');
             $table->boolean('online');
