@@ -60,16 +60,18 @@ class TicketController extends Controller
 
     	}
 
+    	$ticket_id = $activity_id . str_pad($ticket->queue_id, 3, "0", STR_PAD_LEFT);
+
         // return ticket info
         $fp = stream_socket_client("tcp://localhost:13372", $errno, $errstr, 30);
         if (!$fp) {
             echo "$errstr ($errno)<br />\n";
         } else {
-            fwrite($fp, json_encode(['action' => 'printNumber', 'premise_name' => 'Akif', 'desc' => 'Hai!!', 'current_number' => '1213', 'user_number' => '1216', 'estimated_time' => '12:51 AM', 'queue_id' => '12-141-15', 'gen_time' => date('Y-m-d h:i:s')]));
+            fwrite($fp, json_encode(['action' => 'printNumber', 'premise_name' => 'Akif', 'desc' => 'Hai!!', 'current_number' => '1213', 'user_number' => $ticket_id, 'estimated_time' => '12:51 AM', 'queue_id' => '12-141-15', 'gen_time' => date('Y-m-d h:i:s')]));
             fclose($fp);
         }
 
-        return response()->json(['ticket_id' => $activity_id . str_pad($ticket->queue_id, 3, "0", STR_PAD_LEFT), 'premise_id' => $ticket->premise_id, 'activity_id' => $ticket->activity_id, 'datetime' => $ticket->created_at]);
+        return response()->json(['ticket_id' => $ticket_id, 'premise_id' => $ticket->premise_id, 'activity_id' => $ticket->activity_id, 'datetime' => $ticket->created_at]);
     }
 
     public function getTicketETA($premise_id = 1, $activity_id = 4) {
@@ -91,7 +93,7 @@ class TicketController extends Controller
     	}
 
     	// get la
-    	$queue_list = Ticket::where('done', false)->where('premise_id', $premise_id)->where('activity_id', $activity_id)->where('created_at', 'like', date('Y-m-d').' %' )->orderBy('queue_id', 'desc')->limit(3)->get();
+    	$queue_list = Ticket::where('done', false)->where('served', false)->where('premise_id', $premise_id)->where('activity_id', $activity_id)->where('created_at', 'like', date('Y-m-d').' %' )->orderBy('queue_id', 'desc')->limit(3)->get();
     	//return response()->json($queue_list);
 
     	$list = [];
@@ -101,6 +103,17 @@ class TicketController extends Controller
     	}
 
     	return response()->json($list);
+    }
+
+    public function listActivity($premise_id = 1) {
+
+    	if (!Premise::find($premise_id)) {
+    		return false;
+    	}
+
+    	$activities = Activity::where('premise_id', $premise_id)->get();
+
+    	return response()->json($activities);
     }
 
 

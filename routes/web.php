@@ -13,3 +13,5 @@
 
 Route::get('/ticket_id', 'TicketController@createTicket');
 Route::get('/get_eta', 'TicketController@getTicketETA');
+Route::get('/number', 'InterfaceController@number');
+Route::get('/activites', 'TicketController@listActivity');
