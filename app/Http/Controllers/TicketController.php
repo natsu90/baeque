@@ -38,17 +38,15 @@ class TicketController extends Controller
     			return false;
 
     		}
+
+            $old = ($ticket->queue_id + 1);
     		// get ticket
-    		$ticket_new = new Ticket;
-    		$ticket_new->premise_id = $premise_id;
-    		$ticket_new->activity_id = $activity_id;
-    		$ticket_new->queue_id = ($ticket->queue_id + 1);
+    		$ticket = new Ticket;
+    		$ticket->premise_id = $premise_id;
+    		$ticket->activity_id = $activity_id;
+    		$ticket->queue_id = $old;
     		//$ticket_new->finished_at = false;
-    		$ticket_new->save();
-
-    		// return ticket info
-
-    		return response()->json(['ticket_id' => $activity_id . str_pad($ticket_new->queue_id, 3, "0", STR_PAD_LEFT), 'premise_id' => $ticket->premise_id, 'activity_id' => $ticket->activity_id, 'datetime' => $ticket_new->created_at]);
+    		$ticket->save();
     	} else {
     		// first time create ticket
 
@@ -59,12 +57,19 @@ class TicketController extends Controller
     		//$ticket_new->finished_at = false;
     		$ticket->save();
 
-    		// return ticket info
 
-    		return response()->json(['ticket_id' => $activity_id . str_pad($ticket->queue_id, 3, "0", STR_PAD_LEFT), 'premise_id' => $ticket->premise_id, 'activity_id' => $ticket->activity_id, 'datetime' => $ticket->created_at]);
     	}
 
+        // return ticket info
+        $fp = stream_socket_client("tcp://localhost:13372", $errno, $errstr, 30);
+        if (!$fp) {
+            echo "$errstr ($errno)<br />\n";
+        } else {
+            fwrite($fp, json_encode(['action' => 'printNumber', 'premise_name' => 'Akif', 'desc' => 'Hai!!', 'current_number' => '1213', 'user_number' => '1216', 'estimated_time' => '12:51 AM', 'queue_id' => '12-141-15', 'gen_time' => date('Y-m-d h:i:s')]));
+            fclose($fp);
+        }
 
+        return response()->json(['ticket_id' => $activity_id . str_pad($ticket->queue_id, 3, "0", STR_PAD_LEFT), 'premise_id' => $ticket->premise_id, 'activity_id' => $ticket->activity_id, 'datetime' => $ticket->created_at]);
     }
 
     public function getTicketETA($premise_id = 1, $activity_id = 4) {
