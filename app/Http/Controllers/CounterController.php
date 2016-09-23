@@ -8,6 +8,8 @@ use App\Counter;
 use App\Kiosk;
 use App\Ticket;
 
+use Carbon\Carbon;
+
 use App\Http\Controllers\TicketController;
 
 use Illuminate\Http\Request;
@@ -16,11 +18,11 @@ use App\Http\Requests;
 
 class CounterController extends Controller
 {
-    public function listCounterAction($counter_id = 1) {
+    public function listCounterAction($counter_id) {
     	// get last the most early linked to the activity based on queue_id
 
     	if (!$counter = Counter::find($counter_id)) {
-    		return false;
+    		return 'err_no_counter';
     	}
 
     	$activity_enabled = json_decode($counter->activity_enabled);
@@ -37,6 +39,45 @@ class CounterController extends Controller
 		});
 
     	print_r($full_list);
+    }
+
+    public function pickTicketToCounter($counter_id, $ticket_id) {
+
+    	if (!$counter = Counter::find($counter_id)) {
+    		return 'err_no_counter';
+    	}
+
+
+    	if (!$ticket = Ticket::find($ticket_id)) {
+    		return 'err_no_ticket';
+    	}
+
+    	if ($ticket->served) {
+    		return 'err_already_served';
+    	}
+
+    	$serving = json_decode($counter->activity_enabled);
+
+
+    	if (!in_array($ticket->activity_id, $serving)) {
+    		return 'err_not_activity_target';
+    	}
+
+    	$ticket->served = true;
+    	$ticket->serving_counter = $counter_id;
+    	$ticket->served_time = Carbon::now();
+
+    	$ticket->update();
+
+    	// play music
+
+        $fp = stream_socket_client("tcp://localhost:13372", $errno, $errstr, 30);
+        if (!$fp) {
+            echo "$errstr ($errno)<br />\n";
+        } else {
+            fwrite($fp, json_encode(['action' => 'callNumber', 'number' => $ticket->activity_id. str_pad($ticket->queue_id, 3, "0", STR_PAD_LEFT), 'counter' => $counter->id]));
+            fclose($fp);
+        }
     }
 }
 

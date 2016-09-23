@@ -14,7 +14,7 @@ use App\Ticket;
 
 class TicketController extends Controller
 {
-    public function createTicket($premise_id = 1, $activity_id = 1) {
+    public function createTicket($activity_id) {
     	// generate ticket
 
     	// expect: premise_id and activity_id
@@ -24,15 +24,11 @@ class TicketController extends Controller
     	// (activity_id)<count with leading 3 zeros> 
     	// count by days
 
-    	if (!Premise::find($premise_id)) {
-    		return false;
+    	if (!$activity = Activity::where('id', $activity_id)->first()) {
+    		return 'err_no_activity';
     	}
 
-    	if (!$activity = Activity::where('id', $activity_id)->where('premise_id', $premise_id)->first()) {
-    		return false;
-    	}
-
-    	if ($ticket = Ticket::where('premise_id', $premise_id)->where('activity_id', $activity_id)->where('created_at', 'like', date('Y-m-d').' %' )->orderBy('queue_id', 'desc')->first()) {
+    	if ($ticket = Ticket::where('activity_id', $activity_id)->where('created_at', 'like', date('Y-m-d').' %' )->orderBy('queue_id', 'desc')->first()) {
 
     		if ($ticket->queue_id == 999) {
     			return false;
@@ -42,7 +38,7 @@ class TicketController extends Controller
             $old = ($ticket->queue_id + 1);
     		// get ticket
     		$ticket = new Ticket;
-    		$ticket->premise_id = $premise_id;
+    		$ticket->premise_id = $activity->premise_id;
     		$ticket->activity_id = $activity_id;
     		$ticket->queue_id = $old;
     		$ticket->invite = '';
@@ -52,8 +48,8 @@ class TicketController extends Controller
     		// first time create ticket
 
     		$ticket = new Ticket;
-    		$ticket->premise_id = $premise_id;
-    		$ticket->activity_id = $activity_id;
+    		$ticket->premise_id = $activity->premise_id;
+    		$ticket->activity_id = $activity->id;
     		$ticket->queue_id = 0;
     		$ticket->invite = '';
     		//$ticket_new->finished_at = false;
@@ -101,7 +97,7 @@ class TicketController extends Controller
     	$list = [];
 
     	foreach ($queue_list as $queue) {
-    		$list[] = ['queue' => $activity_id . str_pad($queue->queue_id, 3, "0", STR_PAD_LEFT), 'started' => $queue->created_at, 'waiting_time' => humanTiming(strtotime($queue->created_at)), 'time' => strtotime($queue->created_at)];
+    		$list[] = ['id' => $queue->id, 'queue' => $activity_id . str_pad($queue->queue_id, 3, "0", STR_PAD_LEFT), 'started' => $queue->created_at, 'waiting_time' => humanTiming(strtotime($queue->created_at)), 'time' => strtotime($queue->created_at)];
     	}
 
     	return $list;
@@ -117,9 +113,6 @@ class TicketController extends Controller
 
     	return response()->json($activities);
     }
-
-
-
 }
 
 
