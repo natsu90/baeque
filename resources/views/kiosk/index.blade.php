@@ -70,27 +70,14 @@
                 <div class="col-md-6 center-block">
                     <center>
 
-                        <a href="estimated.html"><button class="btn btn-success btn-xl" placeholder="test">Get Number
-                        <br /> <h6>pembayaran bill, pos Malaysia dll</h6></button></a>
-                        <br />
-                        <br />
 
                         @foreach ($list as $item)
-                          akif
-                        @endforeach
-                        <a href="estimated.html"><button class="btn btn-success btn-xl" placeholder="test">Get Number
-                        <br /> <h6>pembayaran bill, pos Malaysia dll</h6></button></a>
-                        <br />
-                        <br />
-                        <a href="estimated.html"><button class="btn btn-success btn-xl" placeholder="test">Get Number
-                        <br /> <h6>pembayaran bill, pos Malaysia dll</h6></button></a>
-                        <br />
-                        <br />
-                        <a href="estimated.html"><button class="btn btn-success btn-xl" placeholder="test">Get Number
-                        <br /> <h6>pembayaran bill, pos Malaysia dll</h6></button></a>
+                        <a href="/api/ticket/{{ $item->id }}"><button class="btn btn-success btn-xl" placeholder="test">{{ $item->title }}
+                        <br /> <h6>{{ $item->desc }}</h6></button></a>
                         <br />
                         <br />
 
+                        @endforeach
                     </center>
                 </div>
 
