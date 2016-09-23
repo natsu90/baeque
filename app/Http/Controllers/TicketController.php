@@ -31,7 +31,7 @@ class TicketController extends Controller
     	if ($ticket = Ticket::where('activity_id', $activity_id)->where('created_at', 'like', date('Y-m-d').' %' )->orderBy('queue_id', 'desc')->first()) {
 
     		if ($ticket->queue_id == 999) {
-    			return false;
+    			return 'err_ticket_ran_out';
 
     		}
 
@@ -41,7 +41,7 @@ class TicketController extends Controller
     		$ticket->premise_id = $activity->premise_id;
     		$ticket->activity_id = $activity_id;
     		$ticket->queue_id = $old;
-    		$ticket->invite = '';
+    		$ticket->invite = "" + $activity_id . rand(0,9) . rand(0,9) ."-".rand(0,9) . rand(0,9).rand(0,9) ."-".rand(0,9).rand(0,9);
     		//$ticket_new->finished_at = false;
     		$ticket->save();
     	} else {
@@ -51,11 +51,9 @@ class TicketController extends Controller
     		$ticket->premise_id = $activity->premise_id;
     		$ticket->activity_id = $activity->id;
     		$ticket->queue_id = 0;
-    		$ticket->invite = '';
+    		$ticket->invite = "" + $activity_id . rand(0,9) . rand(0,9) ."-".rand(0,9) . rand(0,9).rand(0,9) ."-".rand(0,9).rand(0,9);
     		//$ticket_new->finished_at = false;
     		$ticket->save();
-
-
     	}
 
     	$ticket_id = $activity_id . str_pad($ticket->queue_id, 3, "0", STR_PAD_LEFT);

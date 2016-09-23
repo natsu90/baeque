@@ -11,11 +11,13 @@
 |
 */
 
-Route::get('/ticket/{activity_id}', 'TicketController@createTicket')->where('activity_id', '[0-9]+');
-Route::get('/get_eta', 'TicketController@getTicketETA');
-Route::get('/number', 'InterfaceController@number');
-Route::get('/activites_get', 'TicketController@listActivity');
+Route::get('/api/ticket/{activity_id}', 'TicketController@createTicket')->where('activity_id', '[0-9]+');
+Route::get('/api/get_eta', 'TicketController@getTicketETA');
+Route::get('/api/number', 'InterfaceController@number');
+Route::get('/api/activites_get', 'TicketController@listActivity');
 
-Route::get('/counter/queue/{counter_id}', 'CounterController@listCounterAction')->where('counter_id', '[0-9]+');
+Route::get('/api/counter/queue/{counter_id}', 'CounterController@listCounterAction')->where('counter_id', '[0-9]+');
 
-Route::get('/counter/{counter_id}/{ticket_id}', 'CounterController@pickTicketToCounter')->where('counter_id', '[0-9]+')->where('ticket_id', '[0-9]+');
+Route::get('/api/counter/{counter_id}/{ticket_id}', 'CounterController@pickTicketToCounter')->where('counter_id', '[0-9]+')->where('ticket_id', '[0-9]+');
+
+Route::get('/kiosk', 'KioskController@index');
