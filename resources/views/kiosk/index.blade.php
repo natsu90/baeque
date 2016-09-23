@@ -66,16 +66,16 @@
                         <h3>Press button to get your number</h3>
                     </center>
                 </div>
+                <br/>
 
                 <div class="col-md-6 center-block">
                     <center>
 
-
                         @foreach ($list as $item)
-                        <a href="/api/ticket/{{ $item->id }}"><button class="btn btn-success btn-xl" placeholder="test">{{ $item->name }}
+                        <a href="/api/ticket/{{ $item->id }}"><button class="btn btn-success btn-block" placeholder="test"><strong>{{ $item->name }}</strong>
                         <br /> <h6>{{ $item->desc }}</h6></button></a>
                         <br />
-                        <br />
+                        
 
                         @endforeach
                     </center>
