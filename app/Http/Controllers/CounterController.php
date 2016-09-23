@@ -69,7 +69,10 @@ class CounterController extends Controller
 		    return $a['time'] - $b['time'];
 		});
 
-    	return view('kiosk.counter')->with(['current' => $counter, 'list' => $full_list]);
+
+		$current = Ticket::where('serving_counter', $counter_id)->orderBy('updated_at', 'desc')->first();
+		$current_serve = $current->activity_id . str_pad($current->queue_id, 3, "0", STR_PAD_LEFT);
+    	return view('kiosk.counter')->with(['current' => $counter, 'list' => $full_list, 'current_serve' => $current_serve]);
     }
 
     public function pickTicketToCounter($counter_id, $ticket_id) {

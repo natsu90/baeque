@@ -65,7 +65,7 @@
                     <div class="panel-body">
                         <center>
                             <h3>Currently Seving Number</h3>
-                            <h4>1002</h4>
+                            <h4>{{ $current_serve }}</h4>
                             <h3>Queuing count</h3>
                             <h4>{{ count($list) }}</h4>
                             <a href="/markdone/{{ $current->id }}" class="btn btn-primary btn-lg">Done </a>
