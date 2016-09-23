@@ -21,3 +21,6 @@ Route::get('/api/counter/queue/{counter_id}', 'CounterController@listCounterActi
 Route::get('/api/counter/{counter_id}/{ticket_id}', 'CounterController@pickTicketToCounter')->where('counter_id', '[0-9]+')->where('ticket_id', '[0-9]+');
 
 Route::get('/kiosk', 'KioskController@index');
+Route::get('/', 'CounterController@index');
+Route::post('/', 'CounterController@index_process');
+Route::post('/ticket/{id}', 'TicketController@view')->where('id', '[0-9]+');

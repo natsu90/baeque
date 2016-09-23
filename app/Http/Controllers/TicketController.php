@@ -14,6 +14,12 @@ use App\Ticket;
 
 class TicketController extends Controller
 {
+
+	public function view($id) {
+		if (!$ticket = Ticket::find($id)) {
+			return redirect('/');
+		}
+	}
     public function createTicket($activity_id) {
     	// generate ticket
 

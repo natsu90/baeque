@@ -61,12 +61,14 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="col-md-6 center-block">
-                    <h1>Please input your ticket number</h1>
+                    <h3>Please input your ticket number</h3>
                 </div>
 
                 <div class="col-md-4 center-block">
-                    <form>
-                        <input class="form-control" id="inputdefault" type="text">
+                    <form method="post">
+
+                    {{ csrf_field() }}
+                        <input class="form-control" name="invite" id="inputdefault" type="text">
                         <br>
                         <button type="submit" class="btn btn-primary center-block">Submit</button>
                     </form>
@@ -82,10 +84,10 @@
     <!-- /.container -->
 
     <!-- jQuery -->
-    <script src="js/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
 
 </body>
 
