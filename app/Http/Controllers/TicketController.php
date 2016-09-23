@@ -41,7 +41,7 @@ class TicketController extends Controller
     		$ticket->premise_id = $activity->premise_id;
     		$ticket->activity_id = $activity_id;
     		$ticket->queue_id = $old;
-    		$ticket->invite = "" + $activity_id . rand(0,9) . rand(0,9) ."-".rand(0,9) . rand(0,9).rand(0,9) ."-".rand(0,9).rand(0,9);
+    		$ticket->invite = "" + rand(0,9) . rand(0,9) ."-".rand(0,9) . rand(0,9).rand(0,9) ."-".rand(0,9).rand(0,9);
     		//$ticket_new->finished_at = false;
     		$ticket->save();
     	} else {
@@ -51,23 +51,33 @@ class TicketController extends Controller
     		$ticket->premise_id = $activity->premise_id;
     		$ticket->activity_id = $activity->id;
     		$ticket->queue_id = 0;
-    		$ticket->invite = "" + $activity_id . rand(0,9) . rand(0,9) ."-".rand(0,9) . rand(0,9).rand(0,9) ."-".rand(0,9).rand(0,9);
+    		$ticket->invite = "" + rand(0,9) . rand(0,9) ."-".rand(0,9) . rand(0,9).rand(0,9) ."-".rand(0,9).rand(0,9);
     		//$ticket_new->finished_at = false;
     		$ticket->save();
     	}
 
     	$ticket_id = $activity_id . str_pad($ticket->queue_id, 3, "0", STR_PAD_LEFT);
 
+    	$premise = Premise::find($ticket->premise_id);
+    	$get_current = Ticket::where('done', false)->where('served', false)->where('premise_id', $premise->id)->where('activity_id', $ticket->activity_id)->where('created_at', 'like', date('Y-m-d').' %' )->orderBy('queue_id', 'asc')->first();
+
+    	if ($get_current) {
+    		$current_number = $activity_id . str_pad($get_current->queue_id, 3, "0", STR_PAD_LEFT);
+    	} else {
+    		$current_number = "none";
+    	}
+
         // return ticket info
         $fp = stream_socket_client("tcp://localhost:13372", $errno, $errstr, 30);
         if (!$fp) {
             echo "$errstr ($errno)<br />\n";
         } else {
-            fwrite($fp, json_encode(['action' => 'printNumber', 'premise_name' => 'Akif', 'desc' => 'Hai!!', 'current_number' => '1213', 'user_number' => $ticket_id, 'estimated_time' => '12:51 AM', 'queue_id' => '12-141-15', 'gen_time' => date('Y-m-d h:i:s')]));
+            fwrite($fp, json_encode(['action' => 'printNumber', 'premise_name' => $premise->name, 'desc' => $premise->desc, 'current_number' => $current_number, 'user_number' => $ticket_id, 'estimated_time' => '12:51 AM', 'queue_id' => $ticket->invite, 'gen_time' => date('Y-m-d h:i:s')]));
             fclose($fp);
         }
 
-        return response()->json(['ticket_id' => $ticket_id, 'premise_id' => $ticket->premise_id, 'activity_id' => $ticket->activity_id, 'datetime' => $ticket->created_at]);
+        return redirect('/kiosk');
+        //return response()->json(['ticket_id' => $ticket_id, 'premise_id' => $ticket->premise_id, 'activity_id' => $ticket->activity_id, 'datetime' => $ticket->created_at]);
     }
 
     public static function getTicketETA($premise_id = 1, $activity_id = 4) {

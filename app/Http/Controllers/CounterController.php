@@ -79,5 +79,34 @@ class CounterController extends Controller
             fclose($fp);
         }
     }
+
+
+    public function markDownTicketCounter($counter_id, $ticket_id) {
+
+    	if (!$counter = Counter::find($counter_id)) {
+    		return 'err_no_counter';
+    	}
+
+
+    	if (!$ticket = Ticket::find($ticket_id)) {
+    		return 'err_no_ticket';
+    	}
+
+    	if ($ticket->done) {
+    		return 'err_already_done';
+    	}
+
+    	$serving = json_decode($counter->activity_enabled);
+
+
+    	if (!in_array($ticket->activity_id, $serving)) {
+    		return 'err_not_activity_target';
+    	}
+
+    	$ticket->done = true;
+    	$ticket->done_time = Carbon::now();
+
+    	$ticket->update();
+    }
 }
 
