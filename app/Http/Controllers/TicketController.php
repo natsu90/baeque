@@ -14,7 +14,7 @@ use App\Ticket;
 
 class TicketController extends Controller
 {
-    public function createTicket($premise_id = 1, $activity_id = 4) {
+    public function createTicket($premise_id = 1, $activity_id = 1) {
     	// generate ticket
 
     	// expect: premise_id and activity_id
@@ -76,7 +76,7 @@ class TicketController extends Controller
         return response()->json(['ticket_id' => $ticket_id, 'premise_id' => $ticket->premise_id, 'activity_id' => $ticket->activity_id, 'datetime' => $ticket->created_at]);
     }
 
-    public function getTicketETA($premise_id = 1, $activity_id = 4) {
+    public static function getTicketETA($premise_id = 1, $activity_id = 4) {
     	// generate ticket
 
     	// expect: premise_id and activity_id
@@ -95,16 +95,16 @@ class TicketController extends Controller
     	}
 
     	// get la
-    	$queue_list = Ticket::where('done', false)->where('served', false)->where('premise_id', $premise_id)->where('activity_id', $activity_id)->where('created_at', 'like', date('Y-m-d').' %' )->orderBy('queue_id', 'desc')->limit(3)->get();
+    	$queue_list = Ticket::where('done', false)->where('served', false)->where('premise_id', $premise_id)->where('activity_id', $activity_id)->where('created_at', 'like', date('Y-m-d').' %' )->orderBy('queue_id', 'asc')->get();
     	//return response()->json($queue_list);
 
     	$list = [];
 
     	foreach ($queue_list as $queue) {
-    		$list[] = ['queue' => $activity_id . str_pad($queue->queue_id, 3, "0", STR_PAD_LEFT), 'started' => $queue->created_at];
+    		$list[] = ['queue' => $activity_id . str_pad($queue->queue_id, 3, "0", STR_PAD_LEFT), 'started' => $queue->created_at, 'waiting_time' => humanTiming(strtotime($queue->created_at)), 'time' => strtotime($queue->created_at)];
     	}
 
-    	return response()->json($list);
+    	return $list;
     }
 
     public function listActivity($premise_id = 1) {
@@ -118,5 +118,30 @@ class TicketController extends Controller
     	return response()->json($activities);
     }
 
+
+
+}
+
+
+function humanTiming ($time)
+{
+
+    $time = time() - $time; // to get the time since that moment
+    $time = ($time<1)? 1 : $time;
+    $tokens = array (
+        31536000 => 'year',
+        2592000 => 'month',
+        604800 => 'week',
+        86400 => 'day',
+        3600 => 'hour',
+        60 => 'minute',
+        1 => 'second'
+    );
+
+    foreach ($tokens as $unit => $text) {
+        if ($time < $unit) continue;
+        $numberOfUnits = floor($time / $unit);
+        return $numberOfUnits.' '.$text.(($numberOfUnits>1)?'s':'');
+    }
 
 }

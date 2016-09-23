@@ -22,6 +22,7 @@ class CreateTicketsTable extends Migration
             $table->integer('queue_id');
             //$table->datetime('served_time');
             //$table->datetime('done_time');
+            $table->integer('serving_counter')->default(false);
             $table->string('invite');
             $table->timestamps();
         });
