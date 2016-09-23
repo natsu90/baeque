@@ -72,7 +72,7 @@
 
 
                         @foreach ($list as $item)
-                        <a href="/api/ticket/{{ $item->id }}"><button class="btn btn-success btn-xl" placeholder="test">{{ $item->title }}
+                        <a href="/api/ticket/{{ $item->id }}"><button class="btn btn-success btn-xl" placeholder="test">{{ $item->name }}
                         <br /> <h6>{{ $item->desc }}</h6></button></a>
                         <br />
                         <br />
