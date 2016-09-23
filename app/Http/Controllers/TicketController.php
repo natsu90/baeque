@@ -19,6 +19,12 @@ class TicketController extends Controller
 		if (!$ticket = Ticket::find($id)) {
 			return redirect('/');
 		}
+
+		$last_ticket = Ticket::where('served', true)->where('done', false)->orderBy('queue_id', 'desc')->first();
+
+		return view('kiosk.view')->with(['current_ticket' => $last_ticket->activity_id . str_pad($last_ticket->queue_id, 3, "0", STR_PAD_LEFT), 'your_ticket' => $ticket]);
+
+
 	}
     public function createTicket($activity_id) {
     	// generate ticket

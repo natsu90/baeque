@@ -24,15 +24,31 @@ class CounterController extends Controller
 	}
 
 	public function index_process(Request $request) {
+		$id = $request->input('invite');
+
+		if ($id) {
+			//die($id);
+			if ($ticket = Ticket::where('invite', $id)->first()) {
+				//die('heh');
+				return redirect('/ticket/'.$ticket->id);
+			}
+		}
+
+		return view('kiosk.get');
+	}
+
+	/*
+		public function index_process(Request $request) {
 		$id = $request->input('id');
 
-		if ($ticket = Ticket::where('invite_code', $id)) {
-			//die('heh');
+		if ($ticket = Ticket::find($id)) {
+			die)
 			return redirect('/ticket/'.$ticket->id);
 		}
 
 		return view('kiosk.get');
 	}
+	*/
     public function listCounterAction($counter_id) {
     	// get last the most early linked to the activity based on queue_id
 
