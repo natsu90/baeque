@@ -21,11 +21,12 @@ class TicketController extends Controller
 		}
 
 		$last_ticket = Ticket::where('served', true)->where('done', false)->orderBy('queue_id', 'desc')->first();
+		$current_ticket = $ticket->activity_id . " ". str_pad($ticket->queue_id, 3, "0", STR_PAD_LEFT);
 
-		return view('kiosk.view')->with(['current_ticket' => $last_ticket->activity_id . str_pad($last_ticket->queue_id, 3, "0", STR_PAD_LEFT), 'your_ticket' => $ticket]);
-
+		return view('kiosk.view')->with(['current_ticket' => $last_ticket->activity_id . str_pad($last_ticket->queue_id, 3, "0", STR_PAD_LEFT), 'your_ticket' => $current_ticket]);
 
 	}
+
     public function createTicket($activity_id) {
     	// generate ticket
 
@@ -117,7 +118,7 @@ class TicketController extends Controller
     	$list = [];
 
     	foreach ($queue_list as $queue) {
-    		$list[] = ['id' => $queue->id, 'queue' => $activity_id . str_pad($queue->queue_id, 3, "0", STR_PAD_LEFT), 'started' => $queue->created_at, 'waiting_time' => humanTiming(strtotime($queue->created_at)), 'time' => strtotime($queue->created_at)];
+    		$list[] = ['id' => $queue->id, 'activity_id' => $queue->activity_id, 'queue' => $activity_id . str_pad($queue->queue_id, 3, "0", STR_PAD_LEFT), 'started' => $queue->created_at, 'waiting_time' => humanTiming(strtotime($queue->created_at)), 'time' => strtotime($queue->created_at)];
     	}
 
     	return $list;

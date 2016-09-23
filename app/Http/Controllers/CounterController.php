@@ -49,7 +49,7 @@ class CounterController extends Controller
 		return view('kiosk.get');
 	}
 	*/
-    public function listCounterAction($counter_id) {
+    public function viewCounter($counter_id) {
     	// get last the most early linked to the activity based on queue_id
 
     	if (!$counter = Counter::find($counter_id)) {
@@ -69,7 +69,7 @@ class CounterController extends Controller
 		    return $a['time'] - $b['time'];
 		});
 
-    	print_r($full_list);
+    	return view('kiosk.counter')->with(['current' => $counter, 'list' => $full_list]);
     }
 
     public function pickTicketToCounter($counter_id, $ticket_id) {
@@ -109,6 +109,8 @@ class CounterController extends Controller
             fwrite($fp, json_encode(['action' => 'callNumber', 'number' => $ticket->activity_id. str_pad($ticket->queue_id, 3, "0", STR_PAD_LEFT), 'counter' => $counter->id]));
             fclose($fp);
         }
+
+        return redirect('/counter/'. $counter_id);
     }
 
 

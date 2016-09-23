@@ -16,11 +16,13 @@ Route::get('/api/get_eta', 'TicketController@getTicketETA');
 Route::get('/api/number', 'InterfaceController@number');
 Route::get('/api/activites_get', 'TicketController@listActivity');
 
-Route::get('/api/counter/queue/{counter_id}', 'CounterController@listCounterAction')->where('counter_id', '[0-9]+');
+Route::get('/counter/queue/{counter_id}', 'CounterController@listCounterAction')->where('counter_id', '[0-9]+');
 
-Route::get('/api/counter/{counter_id}/{ticket_id}', 'CounterController@pickTicketToCounter')->where('counter_id', '[0-9]+')->where('ticket_id', '[0-9]+');
+Route::get('/counter/{counter_id}/{ticket_id}', 'CounterController@pickTicketToCounter')->where('counter_id', '[0-9]+')->where('ticket_id', '[0-9]+');
 
 Route::get('/kiosk', 'KioskController@index');
 Route::get('/', 'CounterController@index');
 Route::post('/', 'CounterController@index_process');
 Route::get('/ticket/{id}', 'TicketController@view')->where('id', '[0-9]+');
+Route::get('/markdone/{id}', 'TicketController@done')->where('id', '[0-9]+');
+Route::get('/counter/{id}', 'CounterController@viewCounter')->where('id', '[0-9]+');
